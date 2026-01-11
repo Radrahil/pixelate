@@ -6,7 +6,7 @@
 #define kMatrixWidth   19
 #define kMatrixHeight  19
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
-#define IS_SIMULATOR true  // Set to true for Wokwi simulator
+#define IS_SIMULATOR 0  // Set to true for Wokwi simulator
 
 CRGB leds[NUM_LEDS];
 uint8_t gHue = 0;
