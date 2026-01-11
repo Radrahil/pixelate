@@ -67,18 +67,27 @@ void updateGeneration() {
     for (uint8_t x = 0; x < kMatrixWidth; x++) {
       uint8_t neighbors = countNeighbors(x, y);
       
+      // if (grid[y][x]) {
+      //   // Cell is alive
+      //   bool stillAlive = (neighbors == 2 || neighbors == 3);
+      //   if (!stillAlive) {
+      //     // Cell dies - start fade
+      //     fade[y][x] = 255;
+      //   }
+      //   nextGrid[y][x] = stillAlive;
+      // } else {
+      //   // Cell is dead
+      //   nextGrid[y][x] = (neighbors == 3);
+      // }
       if (grid[y][x]) {
-        // Cell is alive
         bool stillAlive = (neighbors == 2 || neighbors == 3);
-        if (!stillAlive) {
-          // Cell dies - start fade
-          fade[y][x] = 255;
-        }
+        if (!stillAlive) fade[y][x] = 255;
         nextGrid[y][x] = stillAlive;
       } else {
-        // Cell is dead
-        nextGrid[y][x] = (neighbors == 3);
+        // B3 OR B6
+        nextGrid[y][x] = (neighbors == 3 || neighbors == 6);
       }
+
     }
   }
   
@@ -136,14 +145,27 @@ void initializeGrid() {
   // grid[10][9] = true;
   // grid[11][9] = true;
 
-  // Diehard 
-  grid[9][13] = true;
-  grid[10][7] = true;
-  grid[10][8] = true;
-  grid[11][8] = true;
-  grid[11][12] = true;
-  grid[11][13] = true;
-  grid[11][14] = true;
+  // // Diehard 
+  // grid[9][13] = true;
+  // grid[10][7] = true;
+  // grid[10][8] = true;
+  // grid[11][8] = true;
+  // grid[11][12] = true;
+  // grid[11][13] = true;
+  // grid[11][14] = true;
+
+  // HighLife replicator (centered)
+  int cx = 9;
+  int cy = 9;
+
+  grid[cy][cx+1] = true;
+  grid[cy][cx+2] = true;
+  grid[cy+1][cx] = true;
+  grid[cy+1][cx+1] = true;
+  grid[cy+2][cx+1] = true;
+  grid[cy+2][cx+2] = true;
+
+
   
   // Clear all fade values
   for (uint8_t y = 0; y < kMatrixHeight; y++) {
@@ -162,7 +184,7 @@ void setup() {
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS)
          .setCorrection(TypicalLEDStrip);
 
-  FastLED.setBrightness(100);
+  FastLED.setBrightness(153);  // 60% brightness (255 * 0.6)
   
   initializeGrid();
 }
